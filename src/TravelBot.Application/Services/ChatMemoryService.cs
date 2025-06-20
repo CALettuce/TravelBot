@@ -27,7 +27,7 @@ namespace TravelBot.Application.Services
         }
 
         public ChatSession? ObtenerChat(Guid id) =>
-            _chats.FirstOrDefault(c => c.Id == id);
+            _chats.FirstOrDefault(c => c.Id == id); 
 
         public List<ChatSession> ObtenerTodos() => _chats;
 
