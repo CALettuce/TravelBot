@@ -8,8 +8,8 @@ namespace TravelBot.Domain.Entities
 {
     public class ChatSession
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
-        public string Nombre { get; set; } = "Nuevo Chat";
+        public Guid Id { get; set; }
+        public string Nombre { get; set; }
         public List<ChatMessage> Mensajes { get; set; } = new();
     }
 }

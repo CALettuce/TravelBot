@@ -1,6 +1,8 @@
+using Microsoft.EntityFrameworkCore;
 using TravelBot.Application.Interfaces;
 using TravelBot.Application.Services;
 using TravelBot.Application.Settings;
+using TravelBot.Infrastructure;
 using TravelBot.Infrastructure.External.OpenAI;
 using TravelBot.Infrastructure.Services;
 
@@ -17,6 +19,9 @@ builder.Services.Configure<OpenAISettings>(builder.Configuration.GetSection("Ope
 builder.Services.AddScoped<IClimaService, ClimaService>();
 builder.Services.AddHttpClient<IOpenAIService, OpenAIService>();
 builder.Services.AddSingleton<IChatMemoryService, ChatMemoryService>();
+builder.Services.AddDbContext<TravelBotDbContext>(options =>
+    options.UseSqlite("Data Source=travelbot.db"));
+builder.Services.AddScoped<IChatStorageService, ChatStorageService>();
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
