@@ -10,6 +10,7 @@ namespace TravelBot.Domain.Entities
     {
         public Guid Id { get; set; }
         public string Nombre { get; set; }
+        public DateTime FechaCreacion { get; set; } = DateTime.UtcNow;
         public List<ChatMessage> Mensajes { get; set; } = new();
     }
 }

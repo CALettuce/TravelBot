@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Microsoft.Extensions.Options;
 using TravelBot.Application.Interfaces;
 using TravelBot.Application.Settings;
+using TravelBot.Domain.Entities;
 
 namespace TravelBot.Infrastructure.External.OpenAI;
 
@@ -12,18 +13,25 @@ public class OpenAIService(HttpClient httpClient, IOptions<OpenAISettings> optio
     private readonly HttpClient _httpClient = httpClient;
     private readonly OpenAISettings _settings = options.Value;
 
-    public async Task<string> GetChatCompletionAsync(string prompt)
+    public async Task<string> GetChatCompletionAsync(IEnumerable<ChatMessage> mensajes)
     {
+        var mensajesFormateados = new List<object>
+        {
+            new { role = "system", content = _settings.Role }
+        };
+
+        mensajesFormateados.AddRange(mensajes.Select(m => new
+        {
+            role = m.Rol,
+            content = m.Texto
+        }));
+
         var requestBody = new
         {
             model = _settings.Model,
             max_tokens = 500,
             temperature = 0.7,
-            messages = new[]
-            {
-                new { role = "system", content = _settings.Role },
-                new { role = "user", content = prompt }
-            }
+            messages = mensajesFormateados
         };
 
         var requestJson = JsonConvert.SerializeObject(requestBody);

@@ -39,11 +39,15 @@ public class ChatController(
         var userMsg = new ChatMessage { Rol = "user", Texto = prompt };
         await chatStorageService.AgregarMensajeAsync(id, userMsg);
 
-        var respuesta = await openAIService.GetChatCompletionAsync(prompt);
+        var chat = await chatStorageService.ObtenerChatAsync(id);
+        if (chat is null) return NotFound();
+
+        var respuesta = await openAIService.GetChatCompletionAsync(chat.Mensajes);
 
         var botMsg = new ChatMessage { Rol = "assistant", Texto = respuesta };
         await chatStorageService.AgregarMensajeAsync(id, botMsg);
 
         return Ok(botMsg);
     }
+
 }

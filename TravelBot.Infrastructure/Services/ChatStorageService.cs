@@ -38,6 +38,7 @@ namespace TravelBot.Infrastructure.Services
 
         public async Task<ChatSession?> ObtenerChatAsync(Guid id) =>
             await _context.Chats.Include(c => c.Mensajes)
+                .OrderByDescending(c => c.FechaCreacion)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
         public async Task<ChatMessage> AgregarMensajeAsync(Guid chatId, ChatMessage mensaje)
